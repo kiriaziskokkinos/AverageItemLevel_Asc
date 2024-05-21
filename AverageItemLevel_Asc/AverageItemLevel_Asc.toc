@@ -1,0 +1,6 @@
+## Interface: 30300
+## Title: AverageItemLevel
+## Notes: Displays the average item level of a player in their tooltip
+## Author: Netherborne
+## Version: 1
+AverageItemLevel_Asc.lua
