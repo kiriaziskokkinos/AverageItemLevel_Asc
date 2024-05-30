@@ -1,9 +1,10 @@
+AverageItemLevel_Asc = select(2, ...)
 local AIL = "|HAiLC|h" -- used as hidden text to be able to find our custom line in the tooltip easier
 local CACHE = {}
-
 local TIMEOUT = 120
 
-local function getCache(unit)
+local function getCacheForUnit(unit)
+	if not unit then return end
 	local guid = UnitGUID(unit)
 	if not CACHE[guid] then
 		CACHE[guid] = {}
@@ -15,20 +16,26 @@ local function getCache(unit)
 	return CACHE[guid]
 end
 
-local function isCoA()
-end
-
-
-function AILGetCacheTable()
+function AverageItemLevel_Asc.GetCache()
 	return CACHE
 end
 
+local function resetThrottles()
+	for _,data in pairs(CACHE) do
+		data.specThrottle = 0
+		data.ilvlThrottle = 0
+	end
+end 
 
+function AverageItemLevel_Asc.SetInspectTimeout(newTimeout)
+	TIMEOUT = newTimeout
+	resetThrottles()
+end
 
 local function updateCache(unit, spec, ilvl, fixIlvl)
 	local class, classFile = UnitClass(unit)
 	local timeNow = GetTime()
-	local data = getCache(unit)
+	local data = getCacheForUnit(unit)
 	if spec then
 		data.spec = spec
 	end
@@ -56,7 +63,7 @@ local function updateCache(unit, spec, ilvl, fixIlvl)
 end
 
 local function getColoredIlvlString(unit)
-	local itemLevel = getCache(unit).ilvl
+	local itemLevel = getCacheForUnit(unit).ilvl
 	local color = WHITE_FONT_COLOR
 	local level = UnitLevel(unit)
 	local expansionTarget = Enum.Expansion.Vanilla
@@ -82,11 +89,11 @@ local function getColoredIlvlString(unit)
 end
 
 local function IsIlvlThrottled(unit)
-	return getCache(unit).ilvlThrottle > GetTime()
+	return getCacheForUnit(unit).ilvlThrottle > GetTime()
 end
 
 local function IsSpecThrottled(unit)
-	return getCache(unit).specThrottle > GetTime()
+	return getCacheForUnit(unit).specThrottle > GetTime()
 end
 
 local function notifyInspections(unit)
@@ -107,7 +114,7 @@ local function OnTooltipSetUnitHandler(self)
 		return
 	end
 	notifyInspections(unit)
-	local spec = getCache(unit).spec
+	local spec = getCacheForUnit(unit).spec
 	local color = ITEM_QUALITY_COLORS[Enum.ItemQuality.Legendary]
 	if spec == UnitClass(unit) or IsCustomClass(unit) then
 		color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
@@ -124,7 +131,7 @@ local function GameTooltipOnEvent(self, event, ...)
 	end
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
 		local ilvl = UnitAverageItemLevel(unit)
-		updateCache(unit, nil, (ilvl > 0 and getCache(unit).ilvl ~= ilvl ) and ilvl or  getCache(unit).ilvl)
+		updateCache(unit, nil, (ilvl > 0 and getCacheForUnit(unit).ilvl ~= ilvl ) and ilvl or  getCacheForUnit(unit).ilvl)
 		for i = 1, GameTooltip:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				_G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
@@ -132,10 +139,10 @@ local function GameTooltipOnEvent(self, event, ...)
 		end
 	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC AND ILVL  if > 0 and different than cached
 		local ilvl = UnitAverageItemLevel(unit)
-		updateCache(unit, UnitSpecAndIcon(unit), (ilvl > 0 and getCache(unit).ilvl ~= ilvl ) and ilvl or  getCache(unit).ilvl)
+		updateCache(unit, UnitSpecAndIcon(unit), (ilvl > 0 and getCacheForUnit(unit).ilvl ~= ilvl ) and ilvl or  getCacheForUnit(unit).ilvl)
 		for i = 1, GameTooltip:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
-				local spec = getCache(unit).spec
+				local spec = getCacheForUnit(unit).spec
 				local color = ITEM_QUALITY_COLORS[Enum.ItemQuality.Legendary]
 				if spec == UnitClass(unit) or IsCustomClass(unit) then
 					color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
