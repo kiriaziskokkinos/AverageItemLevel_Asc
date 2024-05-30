@@ -73,11 +73,13 @@ local function notifyInspections(unit)
 	end
 end
 
-local function updateCache(unit, spec, ilvl)
-	local class, classFile = UnitClass(unit)
+local function updateCacheSpec(unit,spec)
+	if IsSpecThrottled(unit) then return end
 	local timeNow = GetTime()
+	local class, classFile = UnitClass(unit)
 	local data = getCacheForUnit(unit)
 	data.spec = spec or data.spec or class or "?"
+	
 	-- Is Hero --
 	if IsHeroClass(unit) then
 		-- if seasonal, spec == class so timeout instantly. if not, timeout when spec ~= class
@@ -89,9 +91,14 @@ local function updateCache(unit, spec, ilvl)
 		-- Specialization inspections are not implemented yet by ascension
 		data.specExpirationTime = timeNow + TIMEOUT
 	end
+end
 
 
+local function updateCacheIlvl(unit,ilvl)
+	if IsIlvlThrottled(unit) then return end
 	if ilvl == nil then return end
+	local data = getCacheForUnit(unit)
+	local timeNow = GetTime()
 	if ilvl > 0 and data.ilvl == ilvl then
 		print("Inspect result for",UnitName(unit),":",data.ilvl,"-->",ilvl,",saving.")
 		data.ilvlExpirationTime = timeNow + TIMEOUT
@@ -169,7 +176,7 @@ local function GameTooltipOnEvent(self, event, ...)
 	end
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
 		local ilvl = UnitAverageItemLevel(unit)
-		updateCache(unit, nil, ilvl)
+		updateCacheIlvl(unit,ilvl)
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				_G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
@@ -178,7 +185,7 @@ local function GameTooltipOnEvent(self, event, ...)
 	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC AND ILVL  if > 0 and different than cached
 		-- local ilvl = UnitAverageItemLevel(unit)
 		local spec,_ = UnitSpecAndIcon(unit)
-		updateCache(unit, spec)
+		updateCacheSpec(unit,spec)
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				local spec = getCacheForUnit(unit).spec
