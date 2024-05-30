@@ -10,8 +10,8 @@ local function getCacheForUnit(unit)
 		CACHE[guid] = {}
 		CACHE[guid].spec = UnitClass(unit)
 		CACHE[guid].ilvl = 0
-		CACHE[guid].specThrottle = 0
-		CACHE[guid].ilvlThrottle = 0
+		CACHE[guid].specExpirationTime = 0
+		CACHE[guid].ilvlExpirationTime = 0
 	end
 	return CACHE[guid]
 end
@@ -20,16 +20,16 @@ function AverageItemLevel_Asc.GetCache()
 	return CACHE
 end
 
-local function resetThrottles()
+local function resetExpirations()
 	for _,data in pairs(CACHE) do
-		data.specThrottle = 0
-		data.ilvlThrottle = 0
+		data.specExpirationTime = 0
+		data.ilvlExpirationTime = 0
 	end
 end 
 
 function AverageItemLevel_Asc.SetInspectTimeout(newTimeout)
 	TIMEOUT = newTimeout
-	resetThrottles()
+	resetExpirations()
 end
 
 local function updateCache(unit, spec, ilvl, fixIlvl)
@@ -47,20 +47,29 @@ local function updateCache(unit, spec, ilvl, fixIlvl)
 	if IsHeroClass(unit) then
 		-- if seasonal, spec == class so timeout instantly. if not, timeout when spec ~= class
 		if C_Realm.IsSeasonal() or data.spec ~= class then
-			data.specThrottle = timeNow + TIMEOUT
+			data.specExpirationTime = timeNow + TIMEOUT
 		end
 	-- Is CoA --	
 	elseif IsCustomClass(unit) then 
 		-- Specialization inspections are not implemented yet by ascension
-		data.specThrottle = timeNow + TIMEOUT
+		data.specExpirationTime = timeNow + TIMEOUT
 	end
 
 	-- timeout if new info is same as old
 	if ilvl > 0 and data.ilvl == ilvl then
-		data.ilvlThrottle = timeNow + TIMEOUT
+		data.ilvlExpirationTime = timeNow + TIMEOUT
 	end
 
 end
+
+local function IsIlvlThrottled(unit)
+	return getCacheForUnit(unit).ilvlExpirationTime > GetTime()
+end
+
+local function IsSpecThrottled(unit)
+	return getCacheForUnit(unit).specExpirationTime > GetTime()
+end
+
 
 local function getColoredIlvlString(unit)
 	local itemLevel = getCacheForUnit(unit).ilvl
@@ -88,13 +97,7 @@ local function getColoredIlvlString(unit)
 	end
 end
 
-local function IsIlvlThrottled(unit)
-	return getCacheForUnit(unit).ilvlThrottle > GetTime()
-end
 
-local function IsSpecThrottled(unit)
-	return getCacheForUnit(unit).specThrottle > GetTime()
-end
 
 local function notifyInspections(unit)
 	if AscensionInspectFrame and AscensionInspectFrame:IsShown() then
