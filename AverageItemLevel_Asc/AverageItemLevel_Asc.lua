@@ -102,6 +102,7 @@ local function updateCacheIlvl(unit,ilvl)
 	if ilvl > 0 and data.ilvl == ilvl then
 		print("Inspect result for",UnitName(unit),":",data.ilvl,"-->",ilvl,",saving.")
 		data.ilvlExpirationTime = timeNow + TIMEOUT
+		data.inspections = 0
 	elseif data.ilvl ~= ilvl or ilvl == 0  then
 
 		if data.inspections >= MAX_INSPECTIONS_TILL_TIMEOUT then 
