@@ -1,5 +1,6 @@
 local AIL = "|HAiLC|h" -- used as hidden text to be able to find our custom line in the tooltip easier
 local CACHE = {}
+
 local TIMEOUT = 120
 
 local function getCache(unit)
@@ -14,9 +15,18 @@ local function getCache(unit)
 	return CACHE[guid]
 end
 
+local function isCoA()
+end
+
+
+function AILGetCacheTable()
+	return CACHE
+end
+
+
+
 local function updateCache(unit, spec, ilvl, fixIlvl)
 	local class, classFile = UnitClass(unit)
-	local isHero = classFile == "HERO"
 	local timeNow = GetTime()
 	local data = getCache(unit)
 	if spec then
@@ -25,15 +35,24 @@ local function updateCache(unit, spec, ilvl, fixIlvl)
 	if ilvl and ilvl > 0 then
 		data.ilvl = ilvl
 	end
-	--- Should timeout? ----
-	if isHero and (not C_Realm.IsSeasonal() and data.spec ~= class or C_Realm.IsSeasonal()) then
+
+	-- Is Hero --
+	if IsHeroClass(unit) then
+		-- if seasonal, spec == class so timeout instantly. if not, timeout when spec ~= class
+		if C_Realm.IsSeasonal() or data.spec ~= class then
+			data.specThrottle = timeNow + TIMEOUT
+		end
+	-- Is CoA --	
+	elseif IsCustomClass(unit) then 
+		-- Specialization inspections are not implemented yet by ascension
 		data.specThrottle = timeNow + TIMEOUT
 	end
 
-	if isHero and (ilvl > 0 and data.ilvl == ilvl) then
+	-- timeout if new info is same as old
+	if ilvl > 0 and data.ilvl == ilvl then
 		data.ilvlThrottle = timeNow + TIMEOUT
 	end
-	------------------------
+
 end
 
 local function getColoredIlvlString(unit)
@@ -106,18 +125,14 @@ local function GameTooltipOnEvent(self, event, ...)
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
 		local ilvl = UnitAverageItemLevel(unit)
 		updateCache(unit, nil, (ilvl > 0 and getCache(unit).ilvl ~= ilvl ) and ilvl or  getCache(unit).ilvl)
-	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC AND ILVL  if > 0 and different than cached
-		local ilvl = UnitAverageItemLevel(unit)
-		updateCache(unit, UnitSpecAndIcon(unit), (ilvl > 0 and getCache(unit).ilvl ~= ilvl ) and ilvl or  getCache(unit).ilvl)
-	end
-
-	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL
 		for i = 1, GameTooltip:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				_G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
 			end
 		end
-	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC
+	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC AND ILVL  if > 0 and different than cached
+		local ilvl = UnitAverageItemLevel(unit)
+		updateCache(unit, UnitSpecAndIcon(unit), (ilvl > 0 and getCache(unit).ilvl ~= ilvl ) and ilvl or  getCache(unit).ilvl)
 		for i = 1, GameTooltip:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				local spec = getCache(unit).spec
@@ -135,10 +150,5 @@ end
 
 GameTooltip:RegisterEvent("INSPECT_TALENT_READY")
 GameTooltip:RegisterEvent("MYSTIC_ENCHANT_INSPECT_RESULT")
-if not _G["AverageItemLevel_Asc"] then
-	GameTooltip:HookScript("OnEvent", GameTooltipOnEvent)
-	_G["AverageItemLevel_Asc"] = true
-end
-
+GameTooltip:HookScript("OnEvent", GameTooltipOnEvent)
 GameTooltip:SetScript("OnTooltipSetUnit", OnTooltipSetUnitHandler)
--- GameTooltip:SetScript("OnTextChanged",OnTextChangedHandler)
