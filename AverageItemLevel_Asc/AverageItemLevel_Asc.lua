@@ -171,14 +171,14 @@ local function GameTooltipOnEvent(self, event, ...)
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
 		updateCacheIlvl(unit)
 		for i = 1, self:NumLines() do
-			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
+			if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AIL) then -- looks for our hidden text
 				_G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
 			end
 		end
 	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC
 		updateCacheSpec(unit)
 		for i = 1, self:NumLines() do
-			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
+			if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AIL) then -- looks for our hidden text
 				local spec = getCacheForUnit(unit).spec
 				local color = ITEM_QUALITY_COLORS[Enum.ItemQuality.Legendary]
 				if spec == UnitClass(unit) or IsCustomClass(unit) then
@@ -194,4 +194,9 @@ end
 GameTooltip:RegisterEvent("INSPECT_TALENT_READY")
 GameTooltip:RegisterEvent("MYSTIC_ENCHANT_INSPECT_RESULT")
 GameTooltip:HookScript("OnEvent", GameTooltipOnEvent)
-GameTooltip:SetScript("OnTooltipSetUnit", OnTooltipSetUnitHandler)
+
+if GameTooltip:HasScript("OnTooltipSetUnit") then
+	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnitHandler)
+else
+	GameTooltip:SetScript("OnTooltipSetUnit", OnTooltipSetUnitHandler)
+end
