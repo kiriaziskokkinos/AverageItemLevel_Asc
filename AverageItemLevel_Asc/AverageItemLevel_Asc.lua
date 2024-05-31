@@ -7,7 +7,7 @@ local debug = false
 local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local function print(...)
 	if debug then
-	_print(...)
+		_print(...)
 	end
 end
 
@@ -16,9 +16,10 @@ function AverageItemLevel_Asc.toggleDebug()
 	_print(debug and "Debug turned on." or "Debug turned off.")
 end
 
-
 local function getCacheForUnit(unit)
-	if not unit then return end
+	if not unit then
+		return
+	end
 	local guid = UnitGUID(unit)
 	if not CACHE[guid] then
 		CACHE[guid] = {}
@@ -36,19 +37,16 @@ function AverageItemLevel_Asc.GetCache()
 end
 
 local function resetExpirations()
-	for _,data in pairs(CACHE) do
+	for _, data in pairs(CACHE) do
 		data.specExpirationTime = 0
 		data.ilvlExpirationTime = 0
 	end
-end 
+end
 
 function AverageItemLevel_Asc.SetInspectTimeout(newTimeout)
 	TIMEOUT = newTimeout > 0 and newTimeout or 1
 	resetExpirations()
 end
-
-
-
 
 local function IsIlvlThrottled(unit)
 	return getCacheForUnit(unit).ilvlExpirationTime > GetTime()
@@ -57,9 +55,6 @@ end
 local function IsSpecThrottled(unit)
 	return getCacheForUnit(unit).specExpirationTime > GetTime()
 end
-
-
-
 
 local function notifyInspections(unit)
 	if AscensionInspectFrame and AscensionInspectFrame:IsShown() then
@@ -73,46 +68,51 @@ local function notifyInspections(unit)
 	end
 end
 
-local function updateCacheSpec(unit,spec)
-	if IsSpecThrottled(unit) then return end
+local function updateCacheSpec(unit)
+	if IsSpecThrottled(unit) then
+		return
+	end
 	local timeNow = GetTime()
 	local class, classFile = UnitClass(unit)
+	local neweSpec, _ = UnitSpecAndIcon(unit)
 	local data = getCacheForUnit(unit)
-	data.spec = spec or data.spec or class or "?"
-	
+	data.spec = neweSpec or data.spec or class or "?"
+
 	-- Is Hero --
 	if IsHeroClass(unit) then
 		-- if seasonal, spec == class so timeout instantly. if not, timeout when spec ~= class
 		if C_Realm.IsSeasonal() or data.spec ~= class then
 			data.specExpirationTime = timeNow + TIMEOUT
 		end
-	-- Is CoA --	
-	elseif IsCustomClass(unit) then 
+	-- Is CoA --
+	elseif IsCustomClass(unit) then
 		-- Specialization inspections are not implemented yet by ascension
 		data.specExpirationTime = timeNow + TIMEOUT
 	end
 end
 
-
-local function updateCacheIlvl(unit,ilvl)
-	if IsIlvlThrottled(unit) then return end
-	if ilvl == nil then return end
+local function updateCacheIlvl(unit)
+	if IsIlvlThrottled(unit) then
+		return
+	end
+	local ilvl = UnitAverageItemLevel(unit)
+	if ilvl == nil then
+		return
+	end
 	local data = getCacheForUnit(unit)
 	local timeNow = GetTime()
 	if ilvl > 0 and data.ilvl == ilvl then
-		print("Inspect result for",UnitName(unit),":",data.ilvl,"-->",ilvl,",saving.")
+		print("Inspect result for", UnitName(unit), ":", data.ilvl, "-->", ilvl, ",saving.")
 		data.ilvlExpirationTime = timeNow + TIMEOUT
 		data.inspections = 0
-	elseif data.ilvl ~= ilvl or ilvl == 0  then
-
-		if data.inspections >= MAX_INSPECTIONS_TILL_TIMEOUT then 
-			print("Reached inspection limit for",UnitName(unit),",stopping.")
+	elseif data.ilvl ~= ilvl or ilvl == 0 then
+		if data.inspections >= MAX_INSPECTIONS_TILL_TIMEOUT then
+			print("Reached inspection limit for", UnitName(unit), ",stopping.")
 			data.ilvlExpirationTime = timeNow + TIMEOUT
 			data.inspections = 0
 			return
 		end
-
-		print("Inspect result for",UnitName(unit),":",data.ilvl,"-->",ilvl, ",repeating...")
+		print("Inspect result for", UnitName(unit), ":", data.ilvl, "-->", ilvl, ",repeating...")
 		data.ilvlExpirationTime = 0
 		data.ilvl = ilvl
 		-- scaling reporting wrong ilvl workaround
@@ -120,9 +120,6 @@ local function updateCacheIlvl(unit,ilvl)
 		data.inspections = data.inspections + 1
 	end
 end
-
-
-
 
 local function getColoredIlvlString(unit)
 	local itemLevel = getCacheForUnit(unit).ilvl
@@ -150,10 +147,6 @@ local function getColoredIlvlString(unit)
 	end
 end
 
-
-
-
-
 local function OnTooltipSetUnitHandler(self)
 	local _, unit = self:GetUnit()
 	if not unit or not UnitIsPlayer(unit) then
@@ -176,17 +169,14 @@ local function GameTooltipOnEvent(self, event, ...)
 		return
 	end
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
-		local ilvl = UnitAverageItemLevel(unit)
-		updateCacheIlvl(unit,ilvl)
+		updateCacheIlvl(unit)
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				_G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
 			end
 		end
-	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC AND ILVL  if > 0 and different than cached
-		-- local ilvl = UnitAverageItemLevel(unit)
-		local spec,_ = UnitSpecAndIcon(unit)
-		updateCacheSpec(unit,spec)
+	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" then -- UPDATE SPEC
+		updateCacheSpec(unit)
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText(), AIL) then -- looks for our hidden text
 				local spec = getCacheForUnit(unit).spec
@@ -194,7 +184,6 @@ local function GameTooltipOnEvent(self, event, ...)
 				if spec == UnitClass(unit) or IsCustomClass(unit) then
 					color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
 				end
-				-- _G["GameTooltipTextRight" .. i]:SetText(getColoredIlvlString(unit))
 				_G["GameTooltipTextLeft" .. i]:SetText(AIL .. color:WrapText(spec))
 			end
 		end
