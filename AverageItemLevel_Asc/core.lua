@@ -1,6 +1,6 @@
 AiL = select(2, ...)
 local CACHE = {}
-local TIMEOUT = 5
+local TIMEOUT = 60
 local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local _print = print
 AiL.Options = AiL.Options or {}
