@@ -6,6 +6,41 @@ local _print = print
 AiL.Options = AiL.Options or {}
 AiL.Options.ShowIcon = true
 AiL.Options.Debug = false
+AiL.specListLookup = {
+	-- PYROMANCER
+	[706859] = true, -- FLAMEWEAVING 
+
+
+	[805120] = "Influence Cultist", 
+	[805606] = "Corruption Cultist",
+	[520226] = "Dreradnaught Cultist",
+	-- VENOMANCER
+	[500231] = "Fortitude Venomancer",
+	-- WITCH HUNTER
+	[680489] = "Black Knight Witch Hunter",
+	-- REAPER
+	[500283] = "Harvest Reaper",
+	[560427] = "Domination Reaper",
+	-- TEMPLAR
+	[520007] = "Crusader Templar",
+	-- WITCH DOCTOR
+	[804620] = "Shadowhunting Witch Doctor",
+	-- FELSWORN
+	[500067] = "Tyranny Felsworn",
+	-- BARBARIAN
+	[500061] = "Ancestry Barbarian",
+	[706432] = "Headhuntung Barbarian",
+	[500059] = "Brutality Barbarian",
+	-- PRIMALIST
+	[500298] = "Life Primalist",
+	[805943] = "Wildwalker Primalist",
+	[805945] = "Wildwalker Primalist",
+	[680440] = "Geomancy Primalist",
+	[803975] = "Mountain King Primalist",
+	-- SUN CLERIC
+	[680627] = "Valkyrie Sun Cleric",
+
+}
 --- DEBUG STUFF ---
 function AiL.print(...)
 	if AiL.Options.Debug then
@@ -101,6 +136,38 @@ function AiL.updateCacheSpec(unit)
 		if newSpec ~= UnitClass(unit) then -- UnitSpecAndIcon returned Specialization so we need to append the class
 			data.spec = newSpec .. " " .. UnitClass(unit)
 		end
+		---------------- COA TEST ---------------
+		local activeSpec = C_CharacterAdvancement.GetInspectInfo(unit) or 1
+		if not activeSpec then
+			--print("NO ACTIVE SPEC")
+			return
+		end
+		
+		local entries = C_CharacterAdvancement.GetInspectedBuild(unit, activeSpec)
+		if not entries then
+			--print("NO ENTRIES")
+			return
+		end
+		
+		for i, entry in ipairs(entries) do
+			local rank = entry.Rank
+			local internalID  = entry.EntryId
+			
+			local entry = C_CharacterAdvancement.GetEntryByInternalID(entry.EntryId)
+			if entry then
+				local spellID = entry.Spells[rank]
+				if AiL.specListLookup[spellID] then
+					data.spec = AiL.specListLookup[spellID]
+					data.icon = select(3, GetSpellInfo(spellID))
+					data.icon = " |T" .. data.icon .. ".blp:32:32:0:0|t "
+					local color = AiL.getColorforUnitSpec(unit, data.spec)
+					return
+				end
+			end			
+		end
+
+
+
 		-- Specialization inspections are not implemented yet by ascension
 		data.specExpirationTime = timeNow + TIMEOUT
 	end
@@ -118,6 +185,9 @@ function AiL.notifyInspections(unit)
 		if C_MysticEnchant.CanInspect(unit) and not IsSpecThrottled(unit) then
 			C_MysticEnchant.Inspect(unit, true)
 		end
+	end
+	if IsCustomClass(unit) then
+		C_CharacterAdvancement.InspectUnit(unit)
 	end
 end
 

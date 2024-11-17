@@ -1,7 +1,7 @@
 AiL = select(2, ...)
 AiL.Options = AiL.Options or {}
 AiL.hiddenText = "|HAiLC|h" -- used as hidden text to be able to find our custom line in the tooltip easier
-
+AiL.specListLookup = AiL.specListLookup or {}
 local function OnTooltipSetUnitHandler(self)
 	local _, unit = self:GetUnit()
 	if not unit or not UnitIsPlayer(unit) then
@@ -24,18 +24,6 @@ local function GameTooltipOnEvent(self, event, ...)
 	if not unit or not UnitIsPlayer(unit) then
 		return
 	end
-
-	-- if IsCustomClass(unit) then
-	-- 	AiL.updateCacheSpec(unit)
-	-- 	for i = 1, self:NumLines() do
-	-- 		if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
-	-- 			local spec = AiL.getCacheForUnit(unit).spec
-	-- 			local color = AiL.getColorforUnitSpec(unit, spec)
-	-- 			_G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. color:WrapText(spec))
-	-- 		end
-	-- 	end
-	-- end
-
 	if event == "INSPECT_TALENT_READY" then --UPDATE ILVL if > 0 and different than cached
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
@@ -53,7 +41,10 @@ local function GameTooltipOnEvent(self, event, ...)
 				)
 			end
 		end
-	elseif event == "MYSTIC_ENCHANT_INSPECT_RESULT" and IsHeroClass(unit) then -- UPDATE CLASSLESS SPEC
+	elseif
+		(event == "MYSTIC_ENCHANT_INSPECT_RESULT" and IsHeroClass(unit)) or 
+		(event == "INSPECT_CHARACTER_ADVANCEMENT_RESULT" and select(1, ...) == "CA_INSPECT_OK")
+	then 
 		AiL.updateCacheSpec(unit)
 		for i = 1, self:NumLines() do
 			if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
@@ -65,13 +56,14 @@ local function GameTooltipOnEvent(self, event, ...)
 				_G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. icon .. color:WrapText(spec))
 			end
 		end
+		GameTooltip:Show()
 	end
-	GameTooltip:Show()
 end
 
 GameTooltip:RegisterEvent("INSPECT_TALENT_READY")
 GameTooltip:RegisterEvent("MYSTIC_ENCHANT_INSPECT_RESULT")
 GameTooltip:RegisterEvent("AIL_FINAL_INSPECT_REACHED")
+GameTooltip:RegisterEvent("INSPECT_CHARACTER_ADVANCEMENT_RESULT")
 GameTooltip:HookScript("OnEvent", GameTooltipOnEvent)
 
 if GameTooltip:HasScript("OnTooltipSetUnit") then
