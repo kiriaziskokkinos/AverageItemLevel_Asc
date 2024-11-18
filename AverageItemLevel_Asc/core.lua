@@ -8,25 +8,40 @@ AiL.Options.ShowIcon = true
 AiL.Options.Debug = false
 AiL.specListLookup = {
 	-- PYROMANCER
-	[706859] = true, -- FLAMEWEAVING 
-
-
+	[706859] = "Flameweaving Pyromancer",
+	[680961] = "Incineration Pyromancer",
+	[500173] = "Draconic Pyromancer",
+	-- CULTIST
 	[805120] = "Influence Cultist", 
 	[805606] = "Corruption Cultist",
-	[520226] = "Dreradnaught Cultist",
+	[520226] = "Dreadnaught Cultist",
+	[805605] = "Godblade Cultist",
 	-- VENOMANCER
 	[500231] = "Fortitude Venomancer",
+	[800889] = "Stalking Venomancer",
+	[681101] = "Rotweaver Venomancer",
+	[800912] = "Vizier Venomancer",
 	-- WITCH HUNTER
 	[680489] = "Black Knight Witch Hunter",
+	[680234] = "Darkness Witch Hunter",
+	[705492] = "Boltslinger Witch Hunter",
+	[802020] = "Inquisition Witch Hunter",
 	-- REAPER
 	[500283] = "Harvest Reaper",
 	[560427] = "Domination Reaper",
+	[500284] = "Soul Reaper",
 	-- TEMPLAR
 	[520007] = "Crusader Templar",
+	[803147] = "Oathkeeper Templar",
+	[5000008] = "Zealot Templar",
 	-- WITCH DOCTOR
 	[804620] = "Shadowhunting Witch Doctor",
+	[560967] = "Brewing Witch Doctor",
+	[500052] = "Voodoo Witch Doctor",
 	-- FELSWORN
 	[500067] = "Tyranny Felsworn",
+	[705132] = "Slaying Felsworn",
+	[500066] = "Infernal Felsworn",
 	-- BARBARIAN
 	[500061] = "Ancestry Barbarian",
 	[706432] = "Headhuntung Barbarian",
@@ -39,7 +54,47 @@ AiL.specListLookup = {
 	[803975] = "Mountain King Primalist",
 	-- SUN CLERIC
 	[680627] = "Valkyrie Sun Cleric",
-
+	[500207] = "Piety Sun Cleric",
+	[800586] = "Seraphim Sun Cleric",
+	[500209] = "Blessing Sun Cleric",
+	-- RANGER
+	[500022] = "Archery Ranger",
+	[806345] = "Farstrider Ranger",
+	[500024] = "Brigand Ranger",
+	-- BLOODMAGE
+	[804204] = "Eternal Bloodmage",
+	[680668] = "Fleshweaver Bloodmage",
+	[500107] = "Sanguine Bloodmage",
+	[500108] = "Accursed Bloodmage",
+	-- RUNEMASTER
+	[800741] = "Displacement Runemaster",
+	[500309] = "Spellslinger Runemaster",
+	[500314] = "Riftblade Runemaster",
+	-- TINKER
+	[503562] = "Mechanics Tinker",
+	[500215] = "Invention Tinker",
+	[805313] = "Demolition Tinker",
+	-- STORMBRINGER
+	[804019] = "Wind Stormbringer",
+	[500005] = "Maelstrom Stormbringer",
+	[500068] = "Lightning Stormbringer",
+	-- KNIGHT OF XOROTH
+	[704993] = "Hellfire Knight of Xoroth",
+	[706935] = "Defiance Knight of Xoroth",
+	[8804284] = "War Knight of Xoroth",
+	-- GUARDIAN
+	[500049] = "Vanguard Guardian",
+	[500051] = "Inspiration Guardian",
+	[500050] = "Gladiator Guardian", 
+	-- NECROMANCER
+	[500117] = "Death Necromancer",
+	[500165] = "Animation Necromancer",
+	[801760] = "Rime Necromancer", 
+	-- CHRONOMANCER
+	[524965] = "Artificer Chronomancer",
+	[518352] = "Duality Chronomancer",
+	[503811] = "Duality Chronomancer",
+	[801270] = "Displacement Chronomancer", 
 }
 --- DEBUG STUFF ---
 function AiL.print(...)
@@ -67,12 +122,8 @@ function AiL.getCacheForUnit(unit)
 
 		if IsCustomClass(unit) then
 			spec = (spec == UnitClass(unit)) and spec or (spec .. " " .. UnitClass(unit))
-			-- icon = "Interface\\Icons\\classicon_" .. UnitClass(unit):lower()
 		end
-		-- local spec,icon = UnitSpecAndIcon(unit)
-		-- spec = (spec == UnitClass(unit)) and spec
-		-- 		or (spec .. " " .. UnitClass(unit))
-
+		
 		icon = " |T" .. icon .. ".blp:32:32:0:0|t "
 		CACHE[guid] = {
 			spec = spec,
