@@ -1,11 +1,7 @@
-# AverageItemLevel_Asc
-Display specialization and average item level on player tooltips
+# AverageItemLevel Ascension
+Display specialization and average item level on player tooltips.
 
-
-![image](https://github.com/user-attachments/assets/ea43eb8e-cf6f-4413-ba88-064f3900c018)
-
-
-
-
-https://github.com/user-attachments/assets/7076f5e8-15d7-4ec5-95a9-4b31e10f085b
-
+![image](https://github.com/user-attachments/assets/c819fb1d-a0e4-4dc4-9171-36e1d98d618c)
+![image](https://github.com/user-attachments/assets/192d47ae-8069-4801-bf2a-44639ddcc0ae)
+![image](https://github.com/user-attachments/assets/4b29e2fe-b0ac-4b56-a241-f7d3eb0158b6)
+![image](https://github.com/user-attachments/assets/ec015d2a-4d4e-4492-a0e2-d7a802505895)
