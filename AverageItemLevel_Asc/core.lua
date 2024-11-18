@@ -4,7 +4,7 @@ local TIMEOUT = 60
 local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local _print = print
 AiL.Options = AiL.Options or {}
-AiL.Options.ShowIcon = true
+AiL.Options.ShowIcon = true -- CHANGE THIS TO false TO DISABLE ICON
 AiL.Options.Debug = false
 AiL.specListLookup = {
 	-- PYROMANCER
@@ -95,6 +95,11 @@ AiL.specListLookup = {
 	[518352] = "Duality Chronomancer",
 	[503811] = "Duality Chronomancer",
 	[801270] = "Displacement Chronomancer", 
+	-- STARCALLER
+	[801128] = "Warden Starcaller",
+	[804287] = "Moon Guard Starcaller",
+	[805356] = "Sentinel Starcaller",
+	[801973] = "Moon Priest Starcaller",
 }
 --- DEBUG STUFF ---
 function AiL.print(...)
