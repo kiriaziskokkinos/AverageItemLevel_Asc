@@ -81,7 +81,7 @@ AiL.specListLookup = {
 	-- KNIGHT OF XOROTH
 	[704993] = "Hellfire Knight of Xoroth",
 	[706935] = "Defiance Knight of Xoroth",
-	[8804284] = "War Knight of Xoroth",
+	[804284] = "War Knight of Xoroth",
 	-- GUARDIAN
 	[500049] = "Vanguard Guardian",
 	[500051] = "Inspiration Guardian",
@@ -231,15 +231,17 @@ function AiL.notifyInspections(unit)
 
 	if CanInspect(unit) and not IsIlvlThrottled(unit) then
 		NotifyInspect(unit)
+		
+	end
+	if IsCustomClass(unit) and not IsIlvlThrottled(unit) then
+		C_CharacterAdvancement.InspectUnit(unit)
 	end
 	if IsHeroClass(unit) then
 		if C_MysticEnchant.CanInspect(unit) and not IsSpecThrottled(unit) then
 			C_MysticEnchant.Inspect(unit, true)
 		end
 	end
-	if IsCustomClass(unit) then
-		C_CharacterAdvancement.InspectUnit(unit)
-	end
+	
 end
 
 function AiL.updateCacheIlvl(unit)
