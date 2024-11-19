@@ -49,8 +49,8 @@ local function GameTooltipOnEvent(self, event, ...)
                 _G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. icon .. color:WrapText(spec))
             end
         end
-        GameTooltip:Show()
     end
+    GameTooltip:Show()
 end
 
 GameTooltip:RegisterEvent("INSPECT_TALENT_READY")
