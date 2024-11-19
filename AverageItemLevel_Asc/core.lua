@@ -8,99 +8,100 @@ AiL.Options.ShowIcon = true -- CHANGE THIS TO false TO DISABLE ICON
 AiL.Options.Debug = false
 AiL.specListLookup = {
     -- PYROMANCER
-    [706859] = "Flameweaving Pyromancer",
-    [680961] = "Incineration Pyromancer",
-    [500173] = "Draconic Pyromancer",
+    [706859] = {'Flameweaving Pyromancer','Ability_Mage_FieryPayback'},
+    [680961] = {'Incineration Pyromancer','Ability_Warlock_Backdraft'},
+    [500173] = {'Draconic Pyromancer','INV_Weapon_Hand_06'},
     -- CULTIST
-    [805120] = "Influence Cultist",
-    [805606] = "Corruption Cultist",
-    [520226] = "Dreadnaught Cultist",
-    [805605] = "Godblade Cultist",
+    [805120] = {'Influence Cultist','spell_shadow_rune'},
+    [805606] = {'Corruption Cultist','Achievement_Boss_CThun'},
+    [520226] = {'Dreadnought Cultist','inv_shield_grimbatolraid_d_02'},
+    [805605] = {'Godblade Cultist','INV_Sword_61'},
     -- VENOMANCER
-    [500231] = "Fortitude Venomancer",
-    [800889] = "Stalking Venomancer",
-    [681101] = "Rotweaver Venomancer",
-    [800912] = "Vizier Venomancer",
+    [500231] = {'Stalking Venomancer','inv_pet_spiderdemon'},
+    [800889] = {'Fortitude Venomancer','ability_mount_hordescorpionamber'},
+    [681101] = {'Rotweaver Venomancer','_LiquidStone_Poison'},
+    [800912] = {'Vizier Venomancer','rogue_paralytic_poison'},
     -- WITCH HUNTER
-    [680489] = "Black Knight Witch Hunter",
-    [680234] = "Darkness Witch Hunter",
-    [705492] = "Boltslinger Witch Hunter",
-    [802020] = "Inquisition Witch Hunter",
+    [680489] = {'Black Knight Witch Hunter','inv_helmet_23'},
+    [680234] = {'Darkness Witch Hunter','Ability_Warlock_ImprovedSoulLeech'},
+    [705492] = {'Boltslinger Witch Hunter','_d3preparation'},
+    [802020] = {'Inquisition Witch Hunter','Ability_Rogue_StayofExecution'},
     -- REAPER
-    [500283] = "Harvest Reaper",
-    [560427] = "Domination Reaper",
-    [500284] = "Soul Reaper",
+    [500283] = {'Harvest Reaper','ability_rogue_sealfate'},
+    [560427] = {'Domination Reaper','ability_touchofanimus'},
+    [500284] = {'Soul Reaper','inv_artifact_thalkielsdiscord'},
     -- TEMPLAR
-    [520007] = "Crusader Templar",
-    [803147] = "Oathkeeper Templar",
-    [5000008] = "Zealot Templar",
+    [520007] = {'Crusader Monk','Ability_Paladin_BlessedHands'},
+    [803147] = {'Oathkeeper Monk','_D3blindingflash'},
+    [5000008] = {'Zealot Monk','_D3deadlyreach'},
     -- WITCH DOCTOR
-    [804620] = "Shadowhunting Witch Doctor",
-    [560967] = "Brewing Witch Doctor",
-    [500052] = "Voodoo Witch Doctor",
+    [804620] = {'Shadowhunting Witch Doctor','Ability_Hunter_SurvivalInstincts'},
+    [560967] = {'Brewing Witch Doctor','INV_Misc_Cauldron_Nature'},
+    [500052] = {'Voodoo Witch Doctor','INV_Misc_Idol_02'},
     -- FELSWORN
-    [500067] = "Tyranny Felsworn",
-    [705132] = "Slaying Felsworn",
-    [500066] = "Infernal Felsworn",
+    [500067] = {'Tyrant Felsworn','Ability_Warlock_DemonicPower'},
+    [705132] = {'Slaying Felsworn','INV_Weapon_Glave_01'},
+    [500066] = {'Infernal Felsworn','Spell_Shadow_FingerOfDeath'},
     -- BARBARIAN
-    [500061] = "Ancestry Barbarian",
-    [706432] = "Headhuntung Barbarian",
-    [500059] = "Brutality Barbarian",
+    [500061] = {'Ancestry Barbarian','Achievement_Dungeon_UtgardeKeep_Normal'},
+    [706432] = {'Headhunting Barbarian','5_axe_(3)_Border'},
+    [500059] = {'Brutality Barbarian','Ability_Warrior_BloodFrenzy'},
     -- PRIMALIST
-    [500298] = "Life Primalist",
-    [805943] = "Wildwalker Primalist",
-    [805945] = "Wildwalker Primalist",
-    [680440] = "Geomancy Primalist",
-    [803975] = "Mountain King Primalist",
+    [500298] = {'Life Primalist','Spell_Shaman_BlessingOfEternals'},
+    [805943] = {'Wildwalker Primalist','_BearAttack_BrownFire'},
+    [805945] = {'Wildwalker Primalist','_BearAttack_BrownFire'},
+    [680440] = {'Geomancy Primalist','item_earthenmight'},
+    [803975] = {'Mountain King Primalist','inv_elementalearth2'},
     -- SUN CLERIC
-    [680627] = "Valkyrie Sun Cleric",
-    [500207] = "Piety Sun Cleric",
-    [800586] = "Seraphim Sun Cleric",
-    [500209] = "Blessing Sun Cleric",
+    [680627] = {'Valkyrie Sun Cleric','inv_valkiergoldpet'},
+    [500207] = {'Piety Sun Cleric','ability_racial_finalverdict'},
+    [800586] = {'Seraphim Sun Cleric','Spell_Holy_Crusade'},
+    [500209] = {'Blessings Sun Cleric','Ability_Paladin_SacredCleansing'},
     -- RANGER
-    [500022] = "Archery Ranger",
-    [806345] = "Farstrider Ranger",
-    [500024] = "Brigand Ranger",
+    [500022] = {'Archery Ranger','Ability_Hunter_LongShots'},
+    [806345] ={'Farstrider Ranger','INV_Misc_Map02'},
+    [500024] = {'Brigand Ranger','ability_rogue_rollthebones02'},
     -- BLOODMAGE
-    [804204] = "Eternal Bloodmage",
-    [680688] = "Fleshweaver Bloodmage",
-    [500107] = "Sanguine Bloodmage",
-    [500108] = "Accursed Bloodmage",
+    [804204] = {'Eternal Bloodmage','achievement_dungeon_jeshowlis'},
+    [680688] = {'Fleshweaver Bloodmage','custom_t_handsofblood_border'},
+    [500107] = {'Sanguine Bloodmage','Spell_Shadow_LifeDrain'},
+    [500108] = {'Accursed Bloodmage','Spell_DeathKnight_Gnaw_Ghoul'},
     -- RUNEMASTER
-    [800741] = "Displacement Runemaster",
-    [500309] = "Spellslinger Runemaster",
-    [500314] = "Riftblade Runemaster",
+    [800741] = {'Conjuration Runemaster','70_inscription_vantus_rune_azure'},
+    [500309] = {'Spellslinger Runemaster','_D3arcanetorrent'},
+    [500314] = {'Riftblade Spiritmage','INV_Weapon_Shortblade_79'},
     -- TINKER
-    [503562] = "Mechanics Tinker",
-    [500215] = "Invention Tinker",
-    [805313] = "Demolition Tinker",
+    [503562] = {'Mechanics Tinker','INV_Misc_EngGizmos_06'},
+    [500215] = {'Invention Tinker','INV_Gizmo_RocketBootExtreme'},
+    [805313] = {'Demolition Tinker','INV_Musket_04'},
     -- STORMBRINGER
-    [804019] = "Wind Stormbringer",
-    [500005] = "Maelstrom Stormbringer",
-    [500068] = "Lightning Stormbringer",
+    [804019] = {'Wind Stormbringer','Spell_Nature_InvisibilityTotem'},
+    [500005] ={'Maelstrom Stormbringer','Achievement_Boss_Thorim'},
+    [500068] = {'Lightning Stormbringer','ability_vehicle_electrocharge'},
     -- KNIGHT OF XOROTH
-    [704993] = "Hellfire Knight of Xoroth",
-    [706935] = "Defiance Knight of Xoroth",
-    [804284] = "War Knight of Xoroth",
+    [704993] = {'Hellfire Knight of Xoroth','Spell_Shadow_ShadowandFlame'},
+    [706935] = {'Defiance Knight of Xoroth','INV_Belt_18'},
+    [804284] = {'War Knight of Xoroth','INV_MISC_HOOK_01'},
     -- GUARDIAN
-    [500049] = "Vanguard Guardian",
-    [500051] = "Inspiration Guardian",
-    [500050] = "Gladiator Guardian",
+    [500049] = {'Vanguard Guardian','Ability_Warrior_SwordandBoard'},
+    [500051] = {'Inspiration Guardian','Achievement_BG_winWSG_3-0'},
+    [500050] = {'Gladiator Guardian','Achievement_BG_KillFlagCarriers_grabFlag_CapIt'},
     -- NECROMANCER
-    [500117] = "Death Necromancer",
-    [500165] = "Animation Necromancer",
-    [801760] = "Rime Necromancer",
+    [500117] = {'Death Necromancer','achievement_dungeon_naxxramas_25man'},
+    [500165] = {'Animation Necromancer','_D3wallofzombies'},
+    [801760] = {'Rime Necromancer','Achievement_Boss_Amnennar_the_Coldbringer'},
     -- CHRONOMANCER
-    [524965] = "Artificer Chronomancer",
-    [518352] = "Duality Chronomancer",
-    [503811] = "Duality Chronomancer",
-    [801270] = "Displacement Chronomancer",
+    [524965] = {'Artificer Chronomancer','inv_wand_1h_pvp400_c_01'},
+    [518352] = {'Duality Chronomancer','inv_enchant_philostone_lv2'},
+    [503811] = {'Duality Chronomancer','inv_enchant_philostone_lv2'},
+    [801270] = {'Displacement Chronomancer','_AuraCloak_Ice'},
     -- STARCALLER
-    [801128] = "Warden Starcaller",
-    [804287] = "Moon Guard Starcaller",
-    [805356] = "Sentinel Starcaller",
-    [801973] = "Moon Priest Starcaller"
+    [801128] = {'Warden Starcaller','_liquidstone_water'},
+    [804287] = {'Moon Guard Starcaller','ability_hunter_carve'},
+    [805356] = {'Sentinel Starcaller','_Diablo3_ArrowRain_Mage'},
+    [801973] = {'Moon Priest Starcaller','Spell_Frost_ManaRecharge'},
 }
+
 --- DEBUG STUFF ---
 function AiL.print(...)
     if AiL.Options.Debug then
@@ -219,9 +220,9 @@ function AiL.updateCacheSpec(unit)
             if entry then
                 local spellID = entry.Spells[rank]
                 if AiL.specListLookup[spellID] then
-                    data.spec = AiL.specListLookup[spellID]
+                    data.spec = AiL.specListLookup[spellID][1]
 					AiL.print("Inspecting CoA class spec ", UnitName(unit), "is now", data.spec)
-                    data.icon = select(3, GetSpellInfo(spellID))
+                    data.icon = "Interface\\Icons\\"..AiL.specListLookup[spellID][2]
                     data.icon = " |T" .. data.icon .. ".blp:32:32:0:0|t "
                     local color = AiL.getColorforUnitSpec(unit, data.spec)
 					data.specExpirationTime = timeNow + TIMEOUT
