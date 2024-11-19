@@ -5,7 +5,7 @@ local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local _print = print
 AiL.Options = AiL.Options or {}
 AiL.Options.ShowIcon = true -- CHANGE THIS TO false TO DISABLE ICON
-AiL.Options.Debug = false
+AiL.Options.Debug = true
 AiL.specListLookup = {
     -- PYROMANCER
     [706859] = "Flameweaving Pyromancer",
@@ -192,8 +192,11 @@ function AiL.updateCacheSpec(unit)
 		
         if newSpec ~= UnitClass(unit) then -- UnitSpecAndIcon returned Specialization so we need to append the class
             data.spec = newSpec .. " " .. UnitClass(unit)
+            data.icon = newIcon
+            data.specExpirationTime = timeNow + TIMEOUT
+            return
         end
-
+        AiL.print("No specialization was reported by UnitSpecAndIcon(unit). Inspecting Build.")
 
         ---------------- COA TEST ---------------
         local activeSpec = C_CharacterAdvancement.GetInspectInfo(unit) or 1
