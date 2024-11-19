@@ -5,7 +5,7 @@ local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local _print = print
 AiL.Options = AiL.Options or {}
 AiL.Options.ShowIcon = true -- CHANGE THIS TO false TO DISABLE ICON
-AiL.Options.Debug = true
+AiL.Options.Debug = false
 AiL.specListLookup = {
     -- PYROMANCER
     [706859] = "Flameweaving Pyromancer",
