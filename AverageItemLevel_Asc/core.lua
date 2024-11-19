@@ -69,7 +69,7 @@ AiL.specListLookup = {
     -- RUNEMASTER
     [800741] = {'Conjuration Runemaster','70_inscription_vantus_rune_azure'},
     [500309] = {'Spellslinger Runemaster','_D3arcanetorrent'},
-    [500314] = {'Riftblade Spiritmage','INV_Weapon_Shortblade_79'},
+    [500314] = {'Riftblade Runemaster','INV_Weapon_Shortblade_79'},
     -- TINKER
     [503562] = {'Mechanics Tinker','INV_Misc_EngGizmos_06'},
     [500215] = {'Invention Tinker','INV_Gizmo_RocketBootExtreme'},
