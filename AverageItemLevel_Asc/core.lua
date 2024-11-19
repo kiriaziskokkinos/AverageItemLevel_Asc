@@ -17,8 +17,8 @@ AiL.specListLookup = {
     [520226] = {'Dreadnought Cultist','inv_shield_grimbatolraid_d_02'},
     [805605] = {'Godblade Cultist','INV_Sword_61'},
     -- VENOMANCER
-    [500231] = {'Stalking Venomancer','inv_pet_spiderdemon'},
-    [800889] = {'Fortitude Venomancer','ability_mount_hordescorpionamber'},
+    [500231] = {'Fortitude Venomancer','ability_mount_hordescorpionamber'},
+    [800889] = {'Stalking Venomancer','inv_pet_spiderdemon'},
     [681101] = {'Rotweaver Venomancer','_LiquidStone_Poison'},
     [800912] = {'Vizier Venomancer','rogue_paralytic_poison'},
     -- WITCH HUNTER
