@@ -266,7 +266,7 @@ function AiL.updateCacheIlvl(unit)
         data.ilvlExpirationTime = timeNow + TIMEOUT
         data.inspections = 0
         data.true_ilvl = ilvl
-        C_Hook:SendBlizzardEvent("AIL_FINAL_INSPECT_REACHED")
+		GameTooltip:GetScript("OnEvent")(GameTooltip,"AIL_FINAL_INSPECT_REACHED")
     elseif data.ilvl ~= ilvl or ilvl == 0 then
         if data.inspections >= MAX_INSPECTIONS_TILL_TIMEOUT then
             AiL.print("Reached inspection limit for", UnitName(unit), ",stopping.")
