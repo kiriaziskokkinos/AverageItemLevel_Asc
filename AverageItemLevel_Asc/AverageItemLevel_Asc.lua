@@ -46,7 +46,6 @@ local function GameTooltipOnEvent(self, event, ...)
                 local spec = unitCache.spec
                 local icon = AiL.Options.ShowIcon and unitCache.icon or ""
                 local color = AiL.getColorforUnitSpec(unit, spec)
-                AiL.print("cached spec for ", unit, "is", spec)
                 _G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. icon .. color:WrapText(spec))
             end
         end

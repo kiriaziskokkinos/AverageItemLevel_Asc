@@ -63,7 +63,7 @@ AiL.specListLookup = {
     [500024] = "Brigand Ranger",
     -- BLOODMAGE
     [804204] = "Eternal Bloodmage",
-    [680668] = "Fleshweaver Bloodmage",
+    [680688] = "Fleshweaver Bloodmage",
     [500107] = "Sanguine Bloodmage",
     [500108] = "Accursed Bloodmage",
     -- RUNEMASTER
@@ -110,7 +110,7 @@ end
 
 function AiL.toggleDebug()
     AiL.Options.Debug = not AiL.Options.Debug
-    _print(debug and "Debug turned on." or "Debug turned off.")
+    _print(AiL.Options.Debug and "Debug turned on." or "Debug turned off.")
 end
 ------ CACHE ------
 local function GetCache()
@@ -123,12 +123,13 @@ function AiL.getCacheForUnit(unit)
     end
     local guid = UnitGUID(unit)
     if not CACHE[guid] then
+		-- INITIAL DATA BEFORE CACHE
+		
         local spec, icon = UnitSpecAndIcon(unit)
-
+		AiL.print("No cache found for ",UnitName(unit),". Initializing to",spec)
         if IsCustomClass(unit) then
             spec = (spec == UnitClass(unit)) and spec or (spec .. " " .. UnitClass(unit))
         end
-
         icon = " |T" .. icon .. ".blp:32:32:0:0|t "
         CACHE[guid] = {
             spec = spec,
@@ -185,23 +186,25 @@ function AiL.updateCacheSpec(unit)
             data.specExpirationTime = timeNow + TIMEOUT
         end
 
-        -- Is CoA --
+    -- Is CoA --
     elseif IsCustomClass(unit) then
         data.spec = newSpec
-
+		
         if newSpec ~= UnitClass(unit) then -- UnitSpecAndIcon returned Specialization so we need to append the class
             data.spec = newSpec .. " " .. UnitClass(unit)
         end
+
+
         ---------------- COA TEST ---------------
         local activeSpec = C_CharacterAdvancement.GetInspectInfo(unit) or 1
         if not activeSpec then
-            -- print("NO ACTIVE SPEC")
+			AiL.print("active spec of ",UnitName(unit)," is null.")
             return
         end
 
         local entries = C_CharacterAdvancement.GetInspectedBuild(unit, activeSpec)
         if not entries then
-            -- print("NO ENTRIES")
+            AiL.print("GetInspectedBuild did not return entries for spec ",activeSpec," of",UnitName(unit))
             return
         end
 
@@ -214,16 +217,17 @@ function AiL.updateCacheSpec(unit)
                 local spellID = entry.Spells[rank]
                 if AiL.specListLookup[spellID] then
                     data.spec = AiL.specListLookup[spellID]
+					AiL.print("Inspecting CoA class spec ", UnitName(unit), "is now", data.spec)
                     data.icon = select(3, GetSpellInfo(spellID))
                     data.icon = " |T" .. data.icon .. ".blp:32:32:0:0|t "
                     local color = AiL.getColorforUnitSpec(unit, data.spec)
+					data.specExpirationTime = timeNow + TIMEOUT
                     return
                 end
             end
         end
 
-        -- Specialization inspections are not implemented yet by ascension
-        data.specExpirationTime = timeNow + TIMEOUT
+		AiL.print(UnitName(unit), "no spec info found for ActiveSpec=",activeSpec)
     end
 end
 
@@ -236,7 +240,7 @@ function AiL.notifyInspections(unit)
         NotifyInspect(unit)
 
     end
-    if IsCustomClass(unit) and not IsIlvlThrottled(unit) then
+    if IsCustomClass(unit) and not IsSpecThrottled(unit) then
         C_CharacterAdvancement.InspectUnit(unit)
     end
     if IsHeroClass(unit) then
