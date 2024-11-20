@@ -28,6 +28,7 @@ local function GameTooltipOnEvent(self, event, ...)
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
                     AiL.updateCacheIlvl(unit)
+                    GameTooltip:Show()
                     return
             end
         end
@@ -37,6 +38,7 @@ local function GameTooltipOnEvent(self, event, ...)
             if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
+                    GameTooltip:Show()
                     return
             end
         end
@@ -50,11 +52,12 @@ local function GameTooltipOnEvent(self, event, ...)
                 local icon = AiL.Options.ShowIcon and unitCache.icon or ""
                 local color = AiL.getColorforUnitSpec(unit, spec)
                 _G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. icon .. color:WrapText(spec))
+                GameTooltip:Show()
                 return
             end
         end
     end
-    GameTooltip:Show()
+   
 end
 
 GameTooltip:RegisterEvent("INSPECT_TALENT_READY")
