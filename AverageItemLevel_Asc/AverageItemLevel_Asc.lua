@@ -27,14 +27,17 @@ local function GameTooltipOnEvent(self, event, ...)
             if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
+                    AiL.updateCacheIlvl(unit)
+                    return
             end
         end
-        AiL.updateCacheIlvl(unit)
+        
     elseif event == "AIL_FINAL_INSPECT_REACHED" then
         for i = 1, self:NumLines() do
             if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
+                    return
             end
         end
     elseif (event == "MYSTIC_ENCHANT_INSPECT_RESULT" and IsHeroClass(unit)) or
@@ -47,6 +50,7 @@ local function GameTooltipOnEvent(self, event, ...)
                 local icon = AiL.Options.ShowIcon and unitCache.icon or ""
                 local color = AiL.getColorforUnitSpec(unit, spec)
                 _G["GameTooltipTextLeft" .. i]:SetText(AiL.hiddenText .. icon .. color:WrapText(spec))
+                return
             end
         end
     end
