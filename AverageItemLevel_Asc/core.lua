@@ -118,7 +118,7 @@ local function GetCache()
 end
 
 function AiL.getCacheForUnit(unit)
-    if not unit then
+    if not unit or not UnitIsPlayer(unit) then
         return
     end
     local guid = UnitGUID(unit)
@@ -161,14 +161,21 @@ function AiL.SetInspectTimeout(newTimeout)
 end
 
 local function IsIlvlThrottled(unit)
+    if AiL.getCacheForUnit(unit) then
     return AiL.getCacheForUnit(unit).ilvlExpirationTime > GetTime()
+    end
 end
 
 local function IsSpecThrottled(unit)
-    return AiL.getCacheForUnit(unit).specExpirationTime > GetTime()
+    if AiL.getCacheForUnit(unit) then
+        return AiL.getCacheForUnit(unit).specExpirationTime > GetTime()
+    end
 end
 
 function AiL.updateCacheSpec(unit)
+    if not unit or not UnitIsPlayer(unit) then
+        return
+    end
     if IsSpecThrottled(unit) then
         return
     end
@@ -263,6 +270,7 @@ function AiL.updateCacheIlvl(unit)
         return
     end
     local data = AiL.getCacheForUnit(unit)
+    if not data then return end
     local timeNow = GetTime()
     if ilvl > 0 and data.ilvl == ilvl then
         AiL.print("Inspect result for", UnitName(unit), ":", data.ilvl, "-->", ilvl, ",saving.")
@@ -281,7 +289,7 @@ function AiL.updateCacheIlvl(unit)
         data.ilvlExpirationTime = 0
         data.ilvl = ilvl
         -- scaling reporting wrong ilvl workaround
-        AiL.notifyInspections(unit)
+        Timer.After(0.3,function()AiL.updateCacheIlvl(unit)end)
         data.inspections = data.inspections + 1
     end
 end
