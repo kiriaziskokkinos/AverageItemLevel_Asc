@@ -239,11 +239,11 @@ function AiL.notifyInspections(unit)
         return
     end
 
-    if CanInspect(unit) and not IsIlvlThrottled(unit) then
+    if not IsIlvlThrottled(unit) and CanInspect(unit) then
         NotifyInspect(unit)
 
     end
-    if IsCustomClass(unit) and not IsSpecThrottled(unit) then
+    if not IsSpecThrottled(unit) and IsCustomClass(unit) then
         C_CharacterAdvancement.InspectUnit(unit)
     end
     if IsHeroClass(unit) then
