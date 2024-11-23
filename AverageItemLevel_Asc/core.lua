@@ -6,6 +6,7 @@ local _print = print
 AiL.Options = AiL.Options or {}
 AiL.Options.ShowIcon = true -- CHANGE THIS TO false TO DISABLE ICON
 AiL.Options.Debug = false
+AiL.progressTicker = AiL.progressTicker or nil
 AiL.specListLookup = {
     -- PYROMANCER
     [92126] = {'Flameweaving Pyromancer','Ability_Mage_FieryPayback'},
@@ -135,7 +136,7 @@ function AiL.getCacheForUnit(unit)
             spec = spec,
             icon = icon,
             ilvl = 0,
-            true_ilvl = 0,
+            true_ilvl = -1,
             specExpirationTime = 0,
             ilvlExpirationTime = 0,
             inspections = 0
@@ -153,6 +154,11 @@ function AiL.resetAllExpirations()
         data.specExpirationTime = 0
         data.ilvlExpirationTime = 0
     end
+end
+
+function AiL.reset()
+    AiL.ClearCache()
+    AiL.resetAllExpirations()
 end
 
 function AiL.SetInspectTimeout(newTimeout)
@@ -277,6 +283,10 @@ function AiL.updateCacheIlvl(unit)
         data.ilvlExpirationTime = timeNow + TIMEOUT
         data.inspections = 0
         data.true_ilvl = ilvl
+        if AiL.progressTicker then
+            AiL.progressTicker:Cancel()
+            AiL.progressTicker = nil
+        end
 		GameTooltip:GetScript("OnEvent")(GameTooltip,"AIL_FINAL_INSPECT_REACHED")
     elseif data.ilvl ~= ilvl or ilvl == 0 then
         if data.inspections >= MAX_INSPECTIONS_TILL_TIMEOUT then
@@ -289,7 +299,11 @@ function AiL.updateCacheIlvl(unit)
         data.ilvlExpirationTime = 0
         data.ilvl = ilvl
         -- scaling reporting wrong ilvl workaround
-        Timer.After(0.3,function()AiL.updateCacheIlvl(unit)end)
+        if AiL.progressTicker then
+            AiL.progressTicker:Cancel()
+        end
+        AiL.progressTicker = Timer.NewTicker(0.1,function() if ilvl ~= data.true_ilvl then GameTooltip:GetScript("OnEvent")(GameTooltip,"AIL_INSPECT_IN_PROGRESS")  end end)
+        Timer.After(0.5,function()AiL.updateCacheIlvl(unit) end)
         data.inspections = data.inspections + 1
     end
 end
