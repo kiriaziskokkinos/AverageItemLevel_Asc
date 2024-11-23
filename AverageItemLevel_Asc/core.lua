@@ -50,8 +50,8 @@ AiL.specListLookup = {
     -- PRIMALIST
     [92150] = {'Life Primalist','Spell_Shaman_BlessingOfEternals'},
     [92148] = {'Wildwalker Primalist','_BearAttack_BrownFire'},
-    [92149] = {'Geomancy Primalist','item_earthenmight'},
-    [680395] = {'Mountain King Primalist','inv_elementalearth2'},
+    [92149] = {'Geomancy Primalist','inv_elementalearth2'},
+    [680395] = {'Mountain King Primalist','item_earthenmight'},
     -- SUN CLERIC
     [707072] = {'Valkyrie Sun Cleric','inv_valkiergoldpet'},
     [92135] = {'Piety Sun Cleric','ability_racial_finalverdict'},
