@@ -1,6 +1,6 @@
 AiL = select(2, ...)
 local CACHE = {}
-local TIMEOUT = 60
+local TIMEOUT = 180
 local MAX_INSPECTIONS_TILL_TIMEOUT = 5
 local _print = print
 AiL.Options = AiL.Options or {}
@@ -21,10 +21,12 @@ AiL.specListLookup = {
     [92143] = {'Stalking Venomancer','inv_pet_spiderdemon'},
     [92142] = {'Rotweaver Venomancer','_LiquidStone_Poison'},
     [680800] = {'Vizier Venomancer','rogue_paralytic_poison'},
+    [680837] = {'Vizier Venomancer','rogue_paralytic_poison'},
     -- WITCH HUNTER
     [707064] = {'Black Knight Witch Hunter','inv_helmet_23'},
     [92093] = {'Darkness Witch Hunter','Ability_Warlock_ImprovedSoulLeech'},
     [92091] = {'Boltslinger Witch Hunter','_d3preparation'},
+    [92094] = {'Inquisition Witch Hunter','Ability_Rogue_StayofExecution'},
     [707063] = {'Inquisition Witch Hunter','Ability_Rogue_StayofExecution'},
     -- REAPER
     [92145] = {'Harvest Reaper','ability_rogue_sealfate'},
