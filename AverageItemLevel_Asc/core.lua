@@ -69,7 +69,7 @@ AiL.specListLookup = {
     [92112] = {'Sanguine Bloodmage','Spell_Shadow_LifeDrain'},
     [92113] = {'Accursed Bloodmage','Spell_DeathKnight_Gnaw_Ghoul'},
     -- RUNEMASTER
-    [92153] = {'Conjuration Runemaster','70_inscription_vantus_rune_azure'},
+    [92153] = {'Engravement Runemaster','70_inscription_vantus_rune_azure'},
     [92152] = {'Spellslinger Runemaster','_D3arcanetorrent'},
     [92154] = {'Riftblade Runemaster','INV_Weapon_Shortblade_79'},
     -- TINKER
@@ -127,15 +127,16 @@ function AiL.getCacheForUnit(unit)
     if not CACHE[guid] then
 		-- INITIAL DATA BEFORE CACHE
 		
-        local spec, icon = UnitSpecAndIcon(unit)
+        local spec, iconName = UnitSpecAndIcon(unit)
 		AiL.print("No cache found for ",UnitName(unit),". Initializing to",spec)
         if IsCustomClass(unit) then
             spec = (spec == UnitClass(unit)) and spec or (spec .. " " .. UnitClass(unit))
         end
-        icon = " |T" .. icon .. ".blp:32:32:0:0|t "
+        local icon = " |T" .. iconName .. ".blp:32:32:0:0|t "
         CACHE[guid] = {
             spec = spec,
             icon = icon,
+            iconName = iconName,
             ilvl = 0,
             true_ilvl = 0,
             specExpirationTime = 0,
@@ -223,7 +224,7 @@ function AiL.updateCacheSpec(unit)
                 if AiL.specListLookup[spellID] then
                     data.spec = AiL.specListLookup[spellID][1]
 					AiL.print("Inspecting CoA class spec ", UnitName(unit), "is now", data.spec)
-                    data.icon = "Interface\\Icons\\"..AiL.specListLookup[spellID][2]
+                    data.icon = "Interface\\Icons\\".. AiL.specListLookup[spellID][2]
                     data.icon = " |T" .. data.icon .. ".blp:32:32:0:0|t "
                     local color = AiL.getColorforUnitSpec(unit, data.spec)
 					data.specExpirationTime = timeNow + TIMEOUT
