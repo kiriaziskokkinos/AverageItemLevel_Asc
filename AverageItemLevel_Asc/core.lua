@@ -70,7 +70,7 @@ AiL.specListLookup = {
     [92113] = {'Accursed Bloodmage','Spell_DeathKnight_Gnaw_Ghoul'},
     -- RUNEMASTER
     [92153] = {'Engravement Runemaster','70_inscription_vantus_rune_azure'},
-    [92152] = {'Spellslinger Runemaster','_D3arcanetorrent'},
+    [92152] = {'Glyphic Runemaster','_D3arcanetorrent'},
     [92154] = {'Riftblade Runemaster','INV_Weapon_Shortblade_79'},
     -- TINKER
     [92141] = {'Mechanics Tinker','INV_Misc_EngGizmos_06'},
