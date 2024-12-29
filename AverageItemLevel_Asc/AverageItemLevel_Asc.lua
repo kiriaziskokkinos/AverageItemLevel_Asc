@@ -22,9 +22,9 @@ local function GameTooltipOnEvent(self, event, ...)
     if not unit or not UnitIsPlayer(unit) then
         return
     end
-    if event == "INSPECT_TALENT_READY" then -- UPDATE ILVL if > 0 and different than cached
+    if event == "INSPECT_TALENT_READY" then
         for i = 1, self:NumLines() do
-            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
+            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then 
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
             end
@@ -32,7 +32,7 @@ local function GameTooltipOnEvent(self, event, ...)
         AiL.updateCacheIlvl(unit)
     elseif event == "AIL_FINAL_INSPECT_REACHED" then
         for i = 1, self:NumLines() do
-            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
+            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then
                 _G["GameTooltipTextRight" .. i]:SetText(AiL.getColoredIlvlString(UnitLevel(unit),
                     AiL.getCacheForUnit(unit).true_ilvl))
             end
@@ -41,7 +41,7 @@ local function GameTooltipOnEvent(self, event, ...)
         (event == "INSPECT_CHARACTER_ADVANCEMENT_RESULT" and select(1, ...) == "CA_INSPECT_OK") then
         AiL.updateCacheSpec(unit)
         for i = 1, self:NumLines() do
-            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then -- looks for our hidden text
+            if string.match(_G["GameTooltipTextLeft" .. i]:GetText() or "", AiL.hiddenText) then
                 local unitCache = AiL.getCacheForUnit(unit)
                 local spec = unitCache.spec
                 local icon = AiL.Options.ShowIcon and unitCache.icon or ""

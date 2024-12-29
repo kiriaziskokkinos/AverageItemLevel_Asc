@@ -217,7 +217,6 @@ function AiL.updateCacheSpec(unit)
         for i, entry in ipairs(entries) do
             local rank = entry.Rank
             local internalID = entry.EntryId
-
             local entry = C_CharacterAdvancement.GetEntryByInternalID(entry.EntryId)
             if entry then
                 local spellID = entry.Spells[rank]
@@ -226,7 +225,6 @@ function AiL.updateCacheSpec(unit)
 					AiL.print("Inspecting CoA class spec ", UnitName(unit), "is now", data.spec)
                     data.icon = "Interface\\Icons\\".. AiL.specListLookup[spellID][2]
                     data.icon = " |T" .. data.icon .. ".blp:32:32:0:0|t "
-                    local color = AiL.getColorforUnitSpec(unit, data.spec)
 					data.specExpirationTime = timeNow + TIMEOUT
                     return
                 end
@@ -241,7 +239,6 @@ function AiL.notifyInspections(unit)
     if AscensionInspectFrame and AscensionInspectFrame:IsShown() then
         return
     end
-
     if not IsIlvlThrottled(unit) and CanInspect(unit) then
         NotifyInspect(unit)
 
@@ -290,9 +287,12 @@ function AiL.updateCacheIlvl(unit)
 end
 
 function AiL.getColorforUnitSpec(unit, spec)
-    local color = ITEM_QUALITY_COLORS[Enum.ItemQuality.Legendary]
+    local color
     if spec == UnitClass(unit) or IsCustomClass(unit) then
         color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
+    end
+    if not color then
+        color = ITEM_QUALITY_COLORS[Enum.ItemQuality.Legendary]
     end
     return color
 end
