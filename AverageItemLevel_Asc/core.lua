@@ -12,7 +12,7 @@ AiL.specListLookup = {
     [92124] = {'Incineration Pyromancer','Ability_Warlock_Backdraft'},
     [92128] = {'Draconic Pyromancer','INV_Weapon_Hand_06'},
     -- CULTIST
-    [92131] = {'Influence Cultist','spell_shadow_rune'},
+    [92131] = {'Heretic Cultist','spell_shadow_rune'},
     [92130] = {'Corruption Cultist','Achievement_Boss_CThun'},
     [680750] = {'Dreadnought Cultist','inv_shield_grimbatolraid_d_02'},
     [92129] = {'Godblade Cultist','INV_Sword_61'},
